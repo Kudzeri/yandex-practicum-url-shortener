@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	srv := server.NewServe()
+	srv := server.NewServer()
 
 	log.Println("Server started on http://localhost:8080")
 	if err := srv.ListenAndServe(); err != nil {
