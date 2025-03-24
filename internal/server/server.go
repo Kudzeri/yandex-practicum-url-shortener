@@ -8,13 +8,13 @@ import (
 )
 
 func NewServer() *http.Server {
-	db := database.InitDB()
-	defer db.Close()
-	
+	database.InitDB()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/hello", handlers.HelloHandler)
-	mux.HandleFunc("/", handlers.ShortURLHandler)
+	mux.HandleFunc("/short", handlers.ShortURLHandler)
+	mux.HandleFunc("/", handlers.RedirectHandler)
 
 	port := ":8080"
 	return &http.Server{
