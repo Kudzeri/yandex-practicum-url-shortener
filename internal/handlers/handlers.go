@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -16,6 +15,10 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShortURLHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		RedirectHandler(w, r)
+		return
+	}
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
