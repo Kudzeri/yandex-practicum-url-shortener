@@ -1,9 +1,12 @@
 package handlers
 
 import (
-	"fmt"
 	"io"
+	"log"
 	"net/http"
+
+	"github.com/Kudzeri/yandex-practicum-url-shortener/internal/database"
+	"github.com/Kudzeri/yandex-practicum-url-shortener/internal/utils"
 )
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
@@ -12,8 +15,8 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShortURLHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		w.WriteHeader(http.StatusMethodNotAllowed)
+	if r.Method != http.MethodPost {
+		http.Error(w, "Only POST method!", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -24,9 +27,18 @@ func ShortURLHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	data := string(body)
-	fmt.Printf("Received: %s\n", data)
+	url := string(body)
+	shortUrl := utils.GenerateShortURL()
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("The data was successfully received"))
+	_, err = database.DB.Exec("INSERT INTO urls (original_url,short_url) VALUES ($1, $2)", url, shortUrl)
+	if err != nil {
+		http.Error(w, "Database error:", http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
+
+	shortened := "http://localhost:8080/" + shortUrl
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte(shortened))
 }
