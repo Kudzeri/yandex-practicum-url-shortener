@@ -1,0 +1,29 @@
+# Binaries
+/bin/
+/build/
+
+# Vendor directories
+/vendor/
+
+# Go cache and build files
+*.exe
+*.dll
+*.so
+*.dylib
+
+*.test
+
+*.out
+
+# Logs and temporary files
+*.log
+tmp/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
