@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	_ "github.com/lib/pq"
 	"fmt"
 	"log"
 )
@@ -11,7 +12,8 @@ var DB *sql.DB
 func InitDB() *sql.DB {
 	connStr := "host=localhost port=5432 user=admin password=admin dbname=shortener sslmode=disable"
 
-	DB, err := sql.Open("postgres", connStr)
+	var err error
+	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
 	}
