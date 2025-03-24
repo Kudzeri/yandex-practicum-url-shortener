@@ -3,10 +3,14 @@ package server
 import (
 	"net/http"
 
+	"github.com/Kudzeri/yandex-practicum-url-shortener/internal/database"
 	"github.com/Kudzeri/yandex-practicum-url-shortener/internal/handlers"
 )
 
 func NewServer() *http.Server {
+	db := database.InitDB()
+	defer db.Close()
+	
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/hello", handlers.HelloHandler)
